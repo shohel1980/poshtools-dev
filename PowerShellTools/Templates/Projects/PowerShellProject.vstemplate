@@ -1,0 +1,16 @@
+﻿<VSTemplate Type="Project" Version="2.0.0"
+    xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+    <TemplateData>
+        <Name>PowerShell Script Project</Name>
+        <Description>A PowerShell project.</Description>
+        <Icon>PowerShellProject.ico</Icon>
+        <ProjectType>PowerShell</ProjectType>
+        <DefaultName>PowerShellProject</DefaultName>
+        <ProvideDefaultName>true</ProvideDefaultName>
+    </TemplateData>
+    <TemplateContent>
+        <Project File="PowerShellProject.pssproj">
+            <ProjectItem OpenInEditor="true">Script.ps1</ProjectItem>
+        </Project>
+    </TemplateContent>
+</VSTemplate>

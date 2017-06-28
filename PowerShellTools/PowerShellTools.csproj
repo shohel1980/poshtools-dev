@@ -1,0 +1,1012 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0">
+  <Choose>
+    <When Condition=" '$(VisualStudioVersion)'=='11.0'  Or '$(TargetVisualStudioVersion)'=='VS110' ">
+      <PropertyGroup>
+        <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
+        <FileUpgradeFlags>
+        </FileUpgradeFlags>
+        <UpgradeBackupLocation>
+        </UpgradeBackupLocation>
+        <OldToolsVersion>4.0</OldToolsVersion>
+      </PropertyGroup>
+    </When>
+    <When Condition=" '$(VisualStudioVersion)'=='12.0'  Or '$(TargetVisualStudioVersion)'=='VS120' ">
+      <PropertyGroup>
+        <MinimumVisualStudioVersion>12.0</MinimumVisualStudioVersion>
+        <FileUpgradeFlags>
+        </FileUpgradeFlags>
+        <UpgradeBackupLocation>
+        </UpgradeBackupLocation>
+        <OldToolsVersion>4.0</OldToolsVersion>
+      </PropertyGroup>
+    </When>
+    <When Condition=" '$(VisualStudioVersion)'=='14.0'  Or '$(TargetVisualStudioVersion)'=='VS140' ">
+      <PropertyGroup>
+        <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
+        <FileUpgradeFlags>
+        </FileUpgradeFlags>
+        <UpgradeBackupLocation>
+        </UpgradeBackupLocation>
+        <OldToolsVersion>4.0</OldToolsVersion>
+      </PropertyGroup>
+    </When>
+    <When Condition=" '$(VisualStudioVersion)'=='15.0'  Or '$(TargetVisualStudioVersion)'=='VS150' ">
+      <PropertyGroup>
+        <InboxBuild Condition="'$(inbox)' != ''">$(inbox)</InboxBuild>
+        <InboxBuild Condition="'$(InboxBuild)' == ''">false</InboxBuild>
+        <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
+        <FileUpgradeFlags>
+        </FileUpgradeFlags>
+        <UpgradeBackupLocation>
+        </UpgradeBackupLocation>
+        <OldToolsVersion>4.0</OldToolsVersion>
+        <IsProductComponent Condition=" '$(IsProductComponent)' == '' ">$(InboxBuild)</IsProductComponent>
+        <!--
+          IsProductComponent is only needed when inserting the VSIX into VS 2017 installer.
+          It will make the build process to generate a json file which can be used to create a component manifest file.
+        -->
+      </PropertyGroup>
+    </When>
+  </Choose>
+  <Import Project="..\Build\ProjectBefore.settings" />
+  <PropertyGroup>
+    <DelaySign>false</DelaySign>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>14.0</OldToolsVersion>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{456D66A8-E05E-496D-BDCE-AF24BBC12E0D}</ProjectGuid>
+    <ProjectTypeGuids>{82b43b9b-a64c-4715-b499-d71e9ca2bd60};{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PowerShellTools</RootNamespace>
+    <AssemblyName>PowerShellTools.$(VSTarget)</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>$(DefineConstants);TRACE;DEBUG;POWERSHELL</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+    <CreateVsixContainer>True</CreateVsixContainer>
+    <DeployExtension>True</DeployExtension>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+    <StartProgram>$(DevEnvDir)devenv.exe</StartProgram>
+    <StartArguments>/rootsuffix Exp</StartArguments>
+    <CopyVsixExtensionFiles>False</CopyVsixExtensionFiles>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>$(DefineConstants);TRACE;POWERSHELL</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+    <CreateVsixContainer>True</CreateVsixContainer>
+    <NoWarn>436;169;3021</NoWarn>
+    <DeployExtension>False</DeployExtension>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="envdte, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="envdte100, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="envdte80, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="envdte90, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Build" />
+    <Reference Include="Microsoft.Build.Framework" />
+    <Reference Include="Microsoft.Build.Utilities.v4.0" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="microsoft.msxml, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="Microsoft.VisualStudio.CommandBars">
+      <HintPath>$(MSBuildProgramFiles32)\Common Files\Microsoft Shared\MSEnv\PublicAssemblies\Microsoft.VisualStudio.CommandBars.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.ComponentModelHost, Version=$(VSTarget).0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.CoreUtility, Version=$(VSTarget).0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.Debugger.InteropA, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="Microsoft.VisualStudio.Designer.Interfaces, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Editor, Version=$(VSTarget).0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.ImageCatalog, Version=$(VSTarget).0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.Imaging, Version=$(VSTarget).0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.Imaging.Interop.14.0.DesignTime, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Language.Intellisense, Version=$(VSTarget).0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.Language.StandardClassification, Version=$(VSTarget).0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.OLE.Interop" />
+    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.10.0" Condition="'$(VSTarget)' == '14.0'" />
+    <Reference Include="Microsoft.VisualStudio.Package.LanguageService.$(VSTarget), Version=$(VSTarget).0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.Platform.VSEditor" Condition="'$(VSTarget)' == '14.0'" />
+    <Reference Include="Microsoft.VisualStudio.Platform.VSEditor" Condition="'$(VSTarget)' == '15.0'">
+      <HintPath>$(DevEnvDir)\CommonExtensions\Microsoft\Editor\Microsoft.VisualStudio.Platform.VSEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.ProjectAggregator, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.11.0, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" Condition="'$(VSTarget)' == '14.0'" />
+    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.12.0, Version=$(VSTarget).0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop" />
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.12.0, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.$(VSTarget).DesignTime, Version=$(VSTarget).0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.14.0.DesignTime, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.8.0">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.9.0" />
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.10.0">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.11.0">
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Text.Data, Version=$(VSTarget).0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.Text.Logic, Version=$(VSTarget).0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.Text.UI, Version=$(VSTarget).0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.Text.UI.Wpf, Version=$(VSTarget).0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.TextManager.Interop" />
+    <Reference Include="Microsoft.VisualStudio.Shell.$(VSTarget)" />
+    <Reference Include="Microsoft.VisualStudio.Shell.Framework, Version=$(VSTarget).0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" Condition="'$(VSTarget)' == '15.0'" />
+    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.14.0" Condition="'$(VSTarget)' == '14.0' OR '$(VSTarget)' == '15.0'" />
+    <Reference Include="Microsoft.VisualStudio.TextManager.Interop.8.0" />
+    <Reference Include="Microsoft.VisualStudio.Threading, Version=$(VSTarget).0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Windows.Design.Host">
+      <HintPath>$(DevEnvDir)\PrivateAssemblies\Microsoft.Windows.Design.Host.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="PowerShellTools.Interfaces, Version=1.0.1.0, Culture=neutral, PublicKeyToken=1c1481464c386bc0, processorArchitecture=MSIL">
+      <HintPath>..\packages\PowerShellTools.Interfaces.1.0.2\lib\net45\PowerShellTools.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management.Automation">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\PowerShell\System.Management.Automation.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="UIAutomationProvider" />
+    <Reference Include="VSLangProj, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="VSLangProj100, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="VSLangProj2, Version=7.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="VSLangProj80, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="WindowsFormsIntegration" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Classification\ClassificationType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Classification\Classifier.cs" />
+    <Compile Include="Classification\ClassifierServices.cs" />
+    <Compile Include="Classification\HighlightMatchedBracesFormatDefinition.cs" />
+    <Compile Include="Classification\HighlightMatchedBracesTag.cs" />
+    <Compile Include="Classification\IPowerShellTokenizationService.cs" />
+    <Compile Include="Classification\PowerShellBraceMatchingTagger.cs" />
+    <Compile Include="Classification\PowerShellBraceMatchingTaggerProvider.cs" />
+    <Compile Include="Classification\PowerShellClassifier.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Classification\PowerShellClassifierProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Classification\PowerShellErrorTagger.cs" />
+    <Compile Include="Classification\PowerShellErrorTaggerProvider.cs" />
+    <Compile Include="Classification\PowerShellOutliningTagger.cs" />
+    <Compile Include="Classification\PowerShellOutliningTaggerProvider.cs" />
+    <Compile Include="Classification\PowerShellParseUtilities.cs" />
+    <Compile Include="Classification\PowerShellTokenizationService.cs" />
+    <Compile Include="Cmdlets\GetVisualStudioServiceCommand.cs" />
+    <Compile Include="Commands\ExecuteAsScriptCommand.cs" />
+    <Compile Include="Commands\ExecuteFromEditorContextMenuCommand.cs" />
+    <Compile Include="Commands\ExecuteFromSolutionExplorerContextMenuCommand.cs" />
+    <Compile Include="Commands\ExecuteSelectionCommand.cs" />
+    <Compile Include="Commands\ExecuteWithParametersAsScriptCommand.cs" />
+    <Compile Include="Commands\ExecuteWithParametersAsScriptFromSolutionExplorerCommand.cs" />
+    <Compile Include="Commands\ICommand.cs" />
+    <Compile Include="Commands\OpenExplorerCommand.cs" />
+    <Compile Include="Commands\OpenDebugReplCommand.cs" />
+    <Compile Include="Commands\PrettyPrintCommand.cs" />
+    <Compile Include="Commands\ScriptParameterResult.cs" />
+    <Compile Include="Commands\UserInterface\Converters\ByteValueConverter.cs" />
+    <Compile Include="Commands\UserInterface\ConfigurableBoolToVisibilityConveter.cs" />
+    <Compile Include="Commands\UserInterface\DataTypeConstants.cs" />
+    <Compile Include="Commands\UserInterface\Converters\ErrorIconConverter.cs" />
+    <Compile Include="Commands\UserInterface\Converters\IntValueConverter.cs" />
+    <Compile Include="Commands\UserInterface\Converters\LongValueConverter.cs" />
+    <Compile Include="Commands\UserInterface\ParameterEditorModel.cs" />
+    <Compile Include="Commands\UserInterface\ParameterEditorTemplateSelector.cs" />
+    <Compile Include="Commands\UserInterface\ParameterEditorViewModel.cs" />
+    <Compile Include="Commands\UserInterface\ParameterEditorHelper.cs" />
+    <Compile Include="Commands\UserInterface\ParameterType.cs" />
+    <Compile Include="Commands\UserInterface\ParameterValueComparer.cs" />
+    <Compile Include="Commands\UserInterface\ParameterEditorView.xaml.cs">
+      <DependentUpon>ParameterEditorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Commands\UserInterface\ScriptParameter.cs" />
+    <Compile Include="Commands\UserInterface\ScriptParameterViewModel.cs" />
+    <Compile Include="Commands\UserInterface\ValidationResult.cs" />
+    <Compile Include="CredentialUI\CredentialsDialog.cs" />
+    <Compile Include="CredentialUI\NativeCredentialsUI.cs" />
+    <Compile Include="CredentialUI\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="CredentialUI\SecureStringDialog.xaml.cs">
+      <DependentUpon>SecureStringDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CredentialUI\SecureStringDialogViewModel.cs" />
+    <Compile Include="DebugEngine\BreakpointManager.cs" />
+    <Compile Include="DebugEngine\DebugEngineInternalException.cs" />
+    <Compile Include="DebugEngine\NativeMethods.cs" />
+    <Compile Include="DebugEngine\PromptUI\ChoiceButtonItem.cs" />
+    <Compile Include="DebugEngine\PromptUI\ReadHostPromptForChoicesView.xaml.cs">
+      <DependentUpon>ReadHostPromptForChoicesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DebugEngine\PromptUI\ReadHostPromptForChoicesViewModel.cs" />
+    <Compile Include="DebugEngine\Remote\IPowerShellToolsPortSupplier.cs" />
+    <Compile Include="DebugEngine\Remote\RemoteDebugPort.cs" />
+    <Compile Include="DebugEngine\Remote\RemoteDebugPortSupplier.cs" />
+    <Compile Include="DebugEngine\Remote\RemoteEnumDebugProcess.cs" />
+    <Compile Include="DebugEngine\Remote\RemoteEnumDebugPrograms.cs" />
+    <Compile Include="DebugEngine\Remote\RemoteUnsecuredPortPicker.cs" />
+    <Compile Include="DebugEngine\Remote\RemotePortPicker.cs" />
+    <Compile Include="DebugEngine\Remote\RemoteUnsecuredDebugPortSupplier.cs" />
+    <Compile Include="DebugServiceEventHandlerBehaviorAttribute.cs" />
+    <Compile Include="DebugEngine\DebugServiceEventsHandlerProxy.cs" />
+    <Compile Include="DebugEngine\Definitions\Com.cs" />
+    <Compile Include="DebugEngine\Definitions\Enums.cs" />
+    <Compile Include="DebugEngine\Definitions\Guids.cs" />
+    <Compile Include="DebugEngine\Definitions\Hresult.cs" />
+    <Compile Include="DebugEngine\Engine.cs" />
+    <Compile Include="DebugEngine\EngineEvents.cs" />
+    <Compile Include="DebugEngine\Engine\EngineUtils.cs" />
+    <Compile Include="DebugEngine\Engine\OperationThread.cs" />
+    <Compile Include="DebugEngine\Impl\AD7Enums.cs" />
+    <Compile Include="DebugEngine\IRunspaceProvider.cs" />
+    <Compile Include="DebugEngine\PendingBreakpoint.cs" />
+    <Compile Include="DebugEngine\PInvoke.cs" />
+    <Compile Include="DebugEngine\PrivateReflectionDynamicObject.cs" />
+    <Compile Include="DebugEngine\Profiler.cs" />
+    <Compile Include="DebugEngine\PromptUI\ReadHostPromptDialog.xaml.cs">
+      <DependentUpon>ReadHostPromptDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DebugEngine\PromptUI\ReadHostPromptDialogViewModel.cs" />
+    <Compile Include="DebugEngine\ResourceStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceStrings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="DebugEngine\ScirptProgramNode.cs" />
+    <Compile Include="DebugEngine\ScriptBreakpoint.cs" />
+    <Compile Include="DebugEngine\ScriptDebugger.cs" />
+    <Compile Include="DebugEngine\ScriptDebugProcess.cs" />
+    <Compile Include="DebugEngine\ScriptDocumentContext.cs" />
+    <Compile Include="DebugEngine\ScriptProgramProvider.cs" />
+    <Compile Include="DebugEngine\ScriptProperty.cs" />
+    <Compile Include="DebugEngine\ScriptStackFrame.cs" />
+    <Compile Include="DebugEngine\HostUi.cs" />
+    <Compile Include="DebugEngine\DebugEventManager.cs" />
+    <Compile Include="DependencyValidator.cs" />
+    <Compile Include="ExplorerServiceEventsHandlerProxy.cs" />
+    <Compile Include="Intellisense\EdgeTrackingMode.cs" />
+    <Compile Include="Intellisense\ProvideBraceCompletion.cs" />
+    <Compile Include="LanguageService\BraceCompletion\BraceCompletionContext.cs" />
+    <Compile Include="LanguageService\BraceCompletion\BraceCompletionContextProvider.cs" />
+    <Compile Include="LanguageService\BraceCompletion\BraceKind.cs" />
+    <Compile Include="LanguageService\BreakpointValidation\AstDataTypeConstants.cs" />
+    <Compile Include="LanguageService\BreakpointValidation\BreakpointDisplayStyle.cs" />
+    <Compile Include="LanguageService\BreakpointValidation\BreakpointPositionInfo.cs" />
+    <Compile Include="LanguageService\BreakpointValidation\BreakpointValidationHelper.cs" />
+    <Compile Include="LanguageService\BreakpointValidation\BreakpointValidationService.cs" />
+    <Compile Include="LanguageService\TodoWindowTaskProvider.cs" />
+    <Compile Include="Options\BitnessEventArgs.cs" />
+    <Compile Include="Options\BitnessOption.cs" />
+    <Compile Include="LanguageService\DropDownBar\EntryInfoEnums.cs" />
+    <Compile Include="LanguageService\DropDownBar\ScriptEntryInfo.cs" />
+    <Compile Include="LanguageService\DropDownBar\FunctionDefinitionEntryInfo.cs" />
+    <Compile Include="LanguageService\DropDownBar\IDropDownEntryInfo.cs" />
+    <Compile Include="LanguageService\NavigationExtensions.cs" />
+    <Compile Include="Project\DeveloperActivityAttribute.cs" />
+    <Compile Include="Diagnostics\DiagnosticConfiguration.cs" />
+    <Compile Include="Diagnostics\DiagnosticsDialogPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="EditorImports.cs" />
+    <Compile Include="Options\GeneralDialogPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IDependencyValidator.cs" />
+    <Compile Include="Intellisense\IntellisenseController.cs" />
+    <Compile Include="Intellisense\IntellisenseControllerProvider.cs" />
+    <Compile Include="Intellisense\IntelliSenseEventsHandlerProxy.cs" />
+    <Compile Include="Intellisense\IntelliSenseManager.cs" />
+    <Compile Include="Intellisense\PowerShellCompletionSource.cs" />
+    <Compile Include="Intellisense\PowerShellCompletionSourceProvider.cs" />
+    <Compile Include="Intellisense\TabCompleteSession.cs" />
+    <Compile Include="Intellisense\Utilities.cs" />
+    <Compile Include="LanguageService\CodeWindowManager.cs" />
+    <Compile Include="LanguageService\DropDownBar\DropDownBarClient.cs" />
+    <Compile Include="LanguageService\EditorExtensions.cs" />
+    <Compile Include="LanguageService\IndentUtilities.cs" />
+    <Compile Include="LanguageService\PowerShellLanaguagePreferences.cs" />
+    <Compile Include="LanguageService\SmartIndent.cs" />
+    <Compile Include="LanguageService\SmartIndentProvider.cs" />
+    <Compile Include="LanguageService\PowerShellLanguageInfo.cs" />
+    <Compile Include="LanguageService\TextViewFilter.cs" />
+    <Compile Include="LanguageService\EditFilter.cs" />
+    <Compile Include="Guids.cs" />
+    <Compile Include="PackageProperties.cs" />
+    <Compile Include="PowerShellConstants.cs" />
+    <Compile Include="Classification\PowerShellEditorFactory.cs" />
+    <Compile Include="Project\Images\PowerShellMonikers.cs" />
+    <Compile Include="Project\PowerShellCodeDomProvider.cs" />
+    <Compile Include="Project\LocDisplayNameAttribute.cs" />
+    <Compile Include="Project\PowerShellConfigProvider.cs" />
+    <Compile Include="Project\PowerShellNonCodeFileNode.cs" />
+    <Compile Include="Project\PropertyPages\AdvancedPropertyPage.cs" />
+    <Compile Include="Project\PropertyPages\AdvanvedPropertyPageControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Project\PropertyPages\AdvanvedPropertyPageControl.Designer.cs">
+      <DependentUpon>AdvanvedPropertyPageControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Project\PropertyPages\BuildEventPropertyPage.cs" />
+    <Compile Include="Project\PropertyPages\BuildEventPropertyPageControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Project\PropertyPages\BuildEventPropertyPageControl.Designer.cs">
+      <DependentUpon>BuildEventPropertyPageControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Project\PropertyPages\ModuleManifestPropertyPage.cs" />
+    <Compile Include="Project\PropertyPages\ModuleManifestPropertyPageControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Project\PropertyPages\ModuleManifestPropertyPageControl.Designer.cs">
+      <DependentUpon>ModuleManifestPropertyPageControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Project\PropertyPages\DebugPropertyPage.cs" />
+    <Compile Include="Project\PropertyPages\DebugPropertyPageControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Project\PropertyPages\DebugPropertyPageControl.Designer.cs">
+      <DependentUpon>DebugPropertyPageControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Project\PowerShellFileNode.cs" />
+    <Compile Include="Project\PowerShellFileNodeProperties.cs" />
+    <Compile Include="Project\PropertyPages\GeneralPropertyPageControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Project\PropertyPages\GeneralPropertyPageControl.Designer.cs">
+      <DependentUpon>GeneralPropertyPageControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Project\PowerShellLibraryManager.cs" />
+    <Compile Include="Project\PowerShellProjectConfig.cs" />
+    <Compile Include="Project\PowerShellProjectFactory.cs" />
+    <Compile Include="Project\PowerShellProjectLauncher.cs" />
+    <Compile Include="Project\PowerShellProjectNode.cs" />
+    <Compile Include="Project\PowerShellProjectNodeProperties.cs" />
+    <Compile Include="Project\PowerShellProjectPackage.cs" />
+    <Compile Include="Project\PropertyPages\GeneralPropertyPage.cs" />
+    <Compile Include="Project\ProjectConstants.cs" />
+    <Compile Include="Project\PropertyPages\PropertyPageUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Project\ProvideCodeExpansionPathAttribute.cs" />
+    <Compile Include="Project\PSBuildTask.cs" />
+    <Compile Include="Project\ResourcesCategoryAttribute.cs" />
+    <Compile Include="Project\ResourcesDescriptionAttribute.cs" />
+    <Compile Include="Project\ImageListIndex.cs" />
+    <Compile Include="Project\SharedProject\AllFilesProjectElement.cs" />
+    <Compile Include="Project\SharedProject\AssemblyReferenceNode.cs" />
+    <Compile Include="Project\SharedProject\Attributes.cs" />
+    <Compile Include="Project\SharedProject\Automation\AutomationScope.cs" />
+    <Compile Include="Project\SharedProject\Automation\OABuildManager.cs" />
+    <Compile Include="Project\SharedProject\Automation\OAFileItem.cs" />
+    <Compile Include="Project\SharedProject\Automation\OAFolderItem.cs" />
+    <Compile Include="Project\SharedProject\Automation\OANavigableProjectItems.cs" />
+    <Compile Include="Project\SharedProject\Automation\OANullProperty.cs" />
+    <Compile Include="Project\SharedProject\Automation\OAProject.cs" />
+    <Compile Include="Project\SharedProject\Automation\OAProjectConfigurationProperties.cs" />
+    <Compile Include="Project\SharedProject\Automation\OAProjectItem.cs" />
+    <Compile Include="Project\SharedProject\Automation\OAProjectItems.cs" />
+    <Compile Include="Project\SharedProject\Automation\OAProperties.cs" />
+    <Compile Include="Project\SharedProject\Automation\OAProperty.cs" />
+    <Compile Include="Project\SharedProject\Automation\OAReferenceFolderItem.cs" />
+    <Compile Include="Project\SharedProject\Automation\OAReferenceItem.cs" />
+    <Compile Include="Project\SharedProject\Automation\VSProject\OAAssemblyReference.cs" />
+    <Compile Include="Project\SharedProject\Automation\VSProject\OAProjectReference.cs" />
+    <Compile Include="Project\SharedProject\Automation\VSProject\OAReferenceBase.cs" />
+    <Compile Include="Project\SharedProject\Automation\VSProject\OAReferences.cs" />
+    <Compile Include="Project\SharedProject\Automation\VSProject\OAVSProject.cs" />
+    <Compile Include="Project\SharedProject\Automation\VSProject\OAVSProjectItem.cs" />
+    <Compile Include="Project\SharedProject\BuildDependency.cs" />
+    <Compile Include="Project\SharedProject\BuildPropertyPage.cs" />
+    <Compile Include="Project\SharedProject\ClipboardService.cs" />
+    <Compile Include="Project\SharedProject\Command.cs" />
+    <Compile Include="Project\SharedProject\CommonConfigProvider.cs" />
+    <Compile Include="Project\SharedProject\CommonConstants.cs" />
+    <Compile Include="Project\SharedProject\CommonEditorFactory.cs" />
+    <Compile Include="Project\SharedProject\CommonFileNode.cs" />
+    <Compile Include="Project\SharedProject\CommonFolderNode.cs" />
+    <Compile Include="Project\SharedProject\CommonNonCodeFileNode.cs" />
+    <Compile Include="Project\SharedProject\CommonPackage.cs" />
+    <Compile Include="Project\SharedProject\CommonProjectConfig.cs" />
+    <Compile Include="Project\SharedProject\CommonProjectNode.cs" />
+    <Compile Include="Project\SharedProject\CommonProjectNodeProperties.cs" />
+    <Compile Include="Project\SharedProject\CommonProjectPackage.cs" />
+    <Compile Include="Project\SharedProject\CommonPropertyPage.cs" />
+    <Compile Include="Project\SharedProject\CommonReferenceContainerNode.cs" />
+    <Compile Include="Project\SharedProject\CommonUtils.cs" />
+    <Compile Include="Project\SharedProject\ConfigProvider.cs" />
+    <Compile Include="Project\SharedProject\DataObject.cs" />
+    <Compile Include="Project\SharedProject\DebugTimer.cs" />
+    <Compile Include="Project\SharedProject\DependentFileNode.cs" />
+    <Compile Include="Project\SharedProject\DesignPropertyDescriptor.cs" />
+    <Compile Include="Project\SharedProject\DeveloperActivityAttribute.cs" />
+    <Compile Include="Project\SharedProject\DialogWindowVersioningWorkaround.cs" />
+    <Compile Include="Project\SharedProject\DirtyChangedEventArgs.cs" />
+    <Compile Include="Project\SharedProject\DocumentManager.cs" />
+    <Compile Include="Project\SharedProject\EnumBSTR.cs" />
+    <Compile Include="Project\SharedProject\EnumDependencies.cs" />
+    <Compile Include="Project\SharedProject\ExceptionExtensions.cs" />
+    <Compile Include="Project\SharedProject\ExtensibilityEventsDispatcher.cs" />
+    <Compile Include="Project\SharedProject\FileChangeManager.cs" />
+    <Compile Include="Project\SharedProject\FileDocumentManager.cs" />
+    <Compile Include="Project\SharedProject\FileNode.cs" />
+    <Compile Include="Project\SharedProject\FileWatcher.cs" />
+    <Compile Include="Project\SharedProject\FlavoredProjectFactoryBase.cs" />
+    <Compile Include="Project\SharedProject\FolderNode.cs" />
+    <Compile Include="Project\SharedProject\HierarchyIdMap.cs" />
+    <Compile Include="Project\SharedProject\HierarchyNode.cs" />
+    <Compile Include="Project\SharedProject\HierarchyNodeFlags.cs" />
+    <Compile Include="Project\SharedProject\IClipboardService.cs" />
+    <Compile Include="Project\SharedProject\IDEBuildLogger.cs" />
+    <Compile Include="Project\SharedProject\IDiskBasedNode.cs" />
+    <Compile Include="Project\SharedProject\IdleManager.cs" />
+    <Compile Include="Project\SharedProject\ImageHandler.cs" />
+    <Compile Include="Project\SharedProject\Interfaces.cs" />
+    <Compile Include="Project\SharedProject\IProjectLauncher.cs" />
+    <Compile Include="Project\SharedProject\IProjectLaunchProperties.cs" />
+    <Compile Include="Project\SharedProject\IProjectPublisher.cs" />
+    <Compile Include="Project\SharedProject\IPublishFile.cs" />
+    <Compile Include="Project\SharedProject\IPublishProject.cs" />
+    <Compile Include="Project\SharedProject\LocalizableProperties.cs" />
+    <Compile Include="Project\SharedProject\Misc\ConnectionPointContainer.cs" />
+    <Compile Include="Project\SharedProject\Misc\ExternDll.cs" />
+    <Compile Include="Project\SharedProject\Misc\NativeMethods.cs" />
+    <Compile Include="Project\SharedProject\Misc\UnsafeNativeMethods.cs" />
+    <Compile Include="Project\SharedProject\MsBuildProjectElement.cs" />
+    <Compile Include="Project\SharedProject\Navigation\CommonLibraryNode.cs" />
+    <Compile Include="Project\SharedProject\Navigation\HierarchyListener.cs" />
+    <Compile Include="Project\SharedProject\Navigation\ICustomSearchListProvider.cs" />
+    <Compile Include="Project\SharedProject\Navigation\ILibraryManager.cs" />
+    <Compile Include="Project\SharedProject\Navigation\IScopeNode.cs" />
+    <Compile Include="Project\SharedProject\Navigation\ISimpleObject.cs" />
+    <Compile Include="Project\SharedProject\Navigation\Library.cs" />
+    <Compile Include="Project\SharedProject\Navigation\LibraryManager.cs" />
+    <Compile Include="Project\SharedProject\Navigation\LibraryNode.cs" />
+    <Compile Include="Project\SharedProject\Navigation\LibraryTask.cs" />
+    <Compile Include="Project\SharedProject\Navigation\ModuleId.cs" />
+    <Compile Include="Project\SharedProject\Navigation\ProjectLibraryNode.cs" />
+    <Compile Include="Project\SharedProject\Navigation\SimpleObject.cs" />
+    <Compile Include="Project\SharedProject\Navigation\SimpleObjectList.cs" />
+    <Compile Include="Project\SharedProject\Navigation\SourceLocation.cs" />
+    <Compile Include="Project\SharedProject\Navigation\TextLineEventListener.cs" />
+    <Compile Include="Project\SharedProject\NodeProperties.cs" />
+    <Compile Include="Project\SharedProject\ObservableCollectionExtensions.cs" />
+    <Compile Include="Project\SharedProject\OleServiceProvider.cs" />
+    <Compile Include="Project\SharedProject\Output.cs" />
+    <Compile Include="Project\SharedProject\OutputGroup.cs" />
+    <Compile Include="Project\SharedProject\OutputWindowRedirector.cs" />
+    <Compile Include="Project\SharedProject\OverwriteFileDialog.xaml.cs">
+      <DependentUpon>OverwriteFileDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Project\SharedProject\ProcessOutput.cs" />
+    <Compile Include="Project\SharedProject\ProjectConfig.cs" />
+    <Compile Include="Project\SharedProject\ProjectDesignerDocumentManager.cs" />
+    <Compile Include="Project\SharedProject\ProjectDocumentsListener.cs" />
+    <Compile Include="Project\SharedProject\ProjectDocumentsListenerForStartupFileUpdates.cs" />
+    <Compile Include="Project\SharedProject\ProjectElement.cs" />
+    <Compile Include="Project\SharedProject\ProjectFactory.cs" />
+    <Compile Include="Project\SharedProject\ProjectFileConstants.cs" />
+    <Compile Include="Project\SharedProject\ProjectNode.CopyPaste.cs" />
+    <Compile Include="Project\SharedProject\ProjectNode.cs" />
+    <Compile Include="Project\SharedProject\ProjectNode.Events.cs" />
+    <Compile Include="Project\SharedProject\ProjectNode.IOleCommandTarget.cs" />
+    <Compile Include="Project\SharedProject\ProjectPackage.cs" />
+    <Compile Include="Project\SharedProject\ProjectReferenceNode.cs" />
+    <Compile Include="Project\SharedProject\ProjectResources.cs" />
+    <Compile Include="Project\SharedProject\PropertiesEditorLauncher.cs" />
+    <Compile Include="Project\SharedProject\ProvideCodeExpansionPathAttribute.cs" />
+    <Compile Include="Project\SharedProject\ProvideCodeExpansionsAttribute.cs" />
+    <Compile Include="Project\SharedProject\ProvideDebugEngineAttribute.cs" />
+    <Compile Include="Project\SharedProject\ProvideDebugExceptionAttribute.cs" />
+    <Compile Include="Project\SharedProject\ProvideDebugLanguageAttribute.cs" />
+    <Compile Include="Project\SharedProject\ProvideDebugPortPickerAttribute.cs" />
+    <Compile Include="Project\SharedProject\ProvideDebugPortSupplierAttribute.cs" />
+    <Compile Include="Project\SharedProject\ProvideTextEditorAutomationAttribute.cs" />
+    <Compile Include="Project\SharedProject\PublishFailedException.cs" />
+    <Compile Include="Project\SharedProject\PublishFile.cs" />
+    <Compile Include="Project\SharedProject\PublishProject.cs" />
+    <Compile Include="Project\SharedProject\PublishProjectOptions.cs" />
+    <Compile Include="Project\SharedProject\ReferenceContainerNode.cs" />
+    <Compile Include="Project\SharedProject\ReferenceNode.cs" />
+    <Compile Include="Project\SharedProject\Resources.cs" />
+    <Compile Include="Project\SharedProject\SharedCommands.cs" />
+    <Compile Include="Project\SharedProject\SolutionEventsListener.cs" />
+    <Compile Include="Project\SharedProject\SolutionListener.cs" />
+    <Compile Include="Project\SharedProject\SolutionListenerForBuildDependencyUpdate.cs" />
+    <Compile Include="Project\SharedProject\SolutionListenerForProjectEvents.cs" />
+    <Compile Include="Project\SharedProject\SolutionListenerForProjectOpen.cs" />
+    <Compile Include="Project\SharedProject\StructuresEnums.cs" />
+    <Compile Include="Project\SharedProject\SuspendFileChanges.cs" />
+    <Compile Include="Project\SharedProject\TaskDialog.cs" />
+    <Compile Include="Project\SharedProject\TaskExtensions.cs" />
+    <Compile Include="Project\SharedProject\TaskProgressBar.xaml.cs">
+      <DependentUpon>TaskProgressBar.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Project\SharedProject\TrackDocumentsHelper.cs" />
+    <Compile Include="Project\SharedProject\UIThread.cs" />
+    <Compile Include="Project\SharedProject\UIThreadBase.cs" />
+    <Compile Include="Project\SharedProject\UIThreadSynchronizer.cs" />
+    <Compile Include="Project\SharedProject\UpdateSolutionEventsListener.cs" />
+    <Compile Include="Project\SharedProject\Utilities.cs" />
+    <Compile Include="Project\SharedProject\VirtualProjectElement.cs" />
+    <Compile Include="Project\SharedProject\VsCommands.cs" />
+    <Compile Include="Project\SharedProject\VsExtensions.cs" />
+    <Compile Include="Project\SharedProject\VSShellUtilities.cs" />
+    <Compile Include="Project\SharedProject\VsTaskExtensions.cs" />
+    <Compile Include="Project\SharedProject\WaitDialog.cs" />
+    <Compile Include="Project\SharedProject\WebPiComponentPickerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Project\SharedProject\WebPiComponentPickerControl.Designer.cs">
+      <DependentUpon>WebPiComponentPickerControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Project\SharedProject\WebSocketStream.cs" />
+    <Compile Include="Project\SharedProject\Wpf\Commands.cs" />
+    <Compile Include="Project\SharedProject\Wpf\ConfigurationControl.cs" />
+    <Compile Include="Project\SharedProject\Wpf\Controls.cs" />
+    <Compile Include="Project\SharedProject\Wpf\Dialogs.cs" />
+    <Compile Include="Project\SharedProject\Wpf\LabelledButton.cs" />
+    <Compile Include="Project\SharedProject\Wpf\LabelledControl.cs" />
+    <Compile Include="Project\SharedProject\Wpf\LambdaConverter\ILambdaConverterProvider.cs" />
+    <Compile Include="Project\SharedProject\Wpf\LambdaConverter\LambdaConverter.cs" />
+    <Compile Include="Project\SharedProject\Wpf\LambdaConverter\LambdaExtension.cs" />
+    <Compile Include="Project\SharedProject\Wpf\LambdaConverter\LambdaProperties.cs" />
+    <Compile Include="Project\SharedProject\Wpf\NativeMethods.cs" />
+    <Compile Include="Project\Utils\DropDownListProperty.cs" />
+    <Compile Include="Project\Utils\DropDownListPropertyEditor.cs" />
+    <Compile Include="Project\Utils\FileListTypeConverter.cs" />
+    <Compile Include="Project\Utils\VersionConverter.cs" />
+    <Compile Include="Project\XamlDesignerSupport.cs" />
+    <Compile Include="ProvideDiffSupportedContentTypeAttribute.cs" />
+    <Compile Include="RegistrationAttributes.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Repl\PowerShellReplEvaluatorProvider.cs" />
+    <Compile Include="Repl\IPowerShellEvaluator.cs" />
+    <Compile Include="Repl\PowerShellReplEvaluator.cs" />
+    <Compile Include="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="PowerShellToolsPackage.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RunspaceRef.cs" />
+    <Compile Include="ServiceManagement\ChannelFactoryHelper.cs" />
+    <Compile Include="ServiceManagement\ConnectionManager.cs" />
+    <Compile Include="ServiceManagement\PowershellHostProcessException.cs" />
+    <Compile Include="ServiceManagement\PowershellHostProcessHelper.cs" />
+    <Compile Include="Service\ExecutionEngine.cs" />
+    <Compile Include="Service\IExecutionEngine.cs" />
+    <Compile Include="Service\PowerShellHostClientService.cs" />
+    <Compile Include="Service\PowerShellService.cs" />
+    <Compile Include="Snippets\SnippetHandler.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="CredentialUI\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DebugEngine\ResourceStrings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>ResourceStrings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Project\PropertyPages\AdvanvedPropertyPageControl.resx">
+      <DependentUpon>AdvanvedPropertyPageControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Project\PropertyPages\BuildEventPropertyPageControl.resx">
+      <DependentUpon>BuildEventPropertyPageControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Project\PropertyPages\ModuleManifestPropertyPageControl.resx">
+      <DependentUpon>ModuleManifestPropertyPageControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Project\PropertyPages\DebugPropertyPageControl.resx">
+      <DependentUpon>DebugPropertyPageControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Project\PropertyPages\GeneralPropertyPageControl.resx">
+      <DependentUpon>GeneralPropertyPageControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Project\Resources\ProjectResources.resx" />
+    <EmbeddedResource Include="Project\SharedProject\ProjectResources.resx">
+      <DependentUpon>ProjectResources.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Project\SharedProject\Resources.resx">
+      <DependentUpon>Resources.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Project\SharedProject\WebPiComponentPickerControl.resx">
+      <DependentUpon>WebPiComponentPickerControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+      <CustomToolNamespace>PowerShellTools</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VSPackage.resx">
+      <MergeWithCTO>true</MergeWithCTO>
+      <ManifestResourceName>VSPackage</ManifestResourceName>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Commands\UserInterface\Resources\StatusAnnotations_Invalid_color_16x.png" />
+    <Resource Include="Commands\UserInterface\Resources\Warning_yellow_7231_16x16.png" />
+    <Content Include="DebugEngine\PowerShellTools.DebugEngine.csproj" />
+    <Content Include="ItemTemplates\PowerShellScript.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="ItemTemplates\PowerShellTest.zip">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <None Include="Manifest\$(VSTarget)\source.extension.vsixmanifest" />
+    <Content Include="poshtools.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <EmbeddedResource Include="Resources\completionset.bmp" />
+    <Resource Include="Poshtools_128x.png" />
+    <Content Include="PowerShellToolsColors.pkgdef">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="preview.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <EmbeddedResource Include="Project\Resources\ImageList.bmp" />
+    <EmbeddedResource Include="Project\Resources\CommonImageList.bmp" />
+    <EmbeddedResource Include="Resources\PowerShellInteractiveWindow_16x.png" />
+    <Resource Include="Resources\DataIcon.png" />
+    <Resource Include="Resources\ModuleIcon.png" />
+    <Content Include="PowerShellTools.$(VSTarget).imagemanifest">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <VsixPath>.</VsixPath>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Project\PowerShellTools.targets">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <InstallRoot>MSBuild</InstallRoot>
+      <VSIXSubPath>PowerShell Tools for Visual Studio</VSIXSubPath>
+    </Content>
+    <None Include="packages.config" />
+    <None Include="Project\SharedProject\ProcessOutput.cs.rej" />
+    <None Include="Resources\WarningIcon.ico" />
+    <None Include="Resources\ErrorStatus.png" />
+    <Resource Include="Resources\ProjectIcon.png" />
+    <Resource Include="Resources\ScriptIcon.png" />
+    <None Include="Resources\WarningIcon.ico" />
+    <None Include="Resources\ErrorStatus.png" />
+    <Content Include="Snippets\SnippetsIndex.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Resource Include="Templates\Files\PowerShellTest.ico" />
+    <Resource Include="Resources\TestIcon.png" />
+    <Content Include="Templates\Files\PowerShellTest.vstemplate" />
+    <Content Include="Templates\Files\ScriptDataFile.vstemplate" />
+    <Content Include="Templates\Files\ScriptModule.vstemplate" />
+    <Content Include="Templates\Files\Script.vstemplate" />
+    <Resource Include="Templates\Projects\PowerShellModuleProject.ico" />
+    <Content Include="Templates\Projects\PowerShellModuleProject.vstemplate" />
+    <Content Include="Templates\Projects\PowerShellProject.vstemplate" />
+    <Resource Include="Templates\Projects\PowerShellProject.ico" />
+    <Content Include="ItemTemplates\PowerShellScriptModule.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="ItemTemplates\PowerShellScriptDataFile.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="PrettyPrint.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="ProjectTemplates\PowerShellModuleProject.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <None Include="PowerShellToolsProcessHostConsole.exe.config">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="Snippets\PowerShell\advanced function.snippet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Snippets\PowerShell\commentblock.snippet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Snippets\PowerShell\dountil.snippet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Snippets\PowerShell\dowhile.snippet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Snippets\PowerShell\for.snippet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Snippets\PowerShell\foreach.snippet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Snippets\PowerShell\function.snippet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Snippets\PowerShell\if.snippet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Snippets\PowerShell\ifelse.snippet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Snippets\PowerShell\switch.snippet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Snippets\PowerShell\trycatchfinally.snippet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Snippets\PowerShell\tryfinally.snippet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Snippets\PowerShell\while.snippet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <None Include="PostBuild.ps1" />
+    <None Include="Templates\Files\Script.psd1" />
+    <None Include="Templates\Files\Script.psm1" />
+    <None Include="Templates\Files\Script.Tests.ps1" />
+    <None Include="Templates\Projects\Module.psd1" />
+    <None Include="Templates\Projects\Module.psm1" />
+    <None Include="Templates\Projects\Module.tests.ps1" />
+    <None Include="Templates\Projects\PowerShellModuleProject.pssproj">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Templates\Projects\PowerShellProject.pssproj">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Templates\Projects\Script.ps1" />
+    <Resource Include="Templates\Files\PowerShellScript.ico" />
+    <Resource Include="Templates\Files\PowerShellScriptModule.ico" />
+    <Resource Include="Templates\Files\PowerShellScriptDataFile.ico" />
+    <None Include="PowerShellTools.targets" />
+    <Content Include="License.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="ProjectTemplates\PowerShellProject.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="PowerShellToolsProcessHost.exe.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>false</IncludeInVSIX>
+    </Content>
+    <None Include="Project\SharedProject\SharedProject.proj" />
+    <None Include="Templates\Files\Script.ps1" />
+  </ItemGroup>
+  <ItemGroup>
+    <VSCTCompile Include="PowerShellTools.$(VSTarget).vsct">
+      <ResourceName>Menus.ctmenu</ResourceName>
+      <SubType>Designer</SubType>
+    </VSCTCompile>
+    <Content Include="PowerShellTools.vsct" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Images.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Package.ico" />
+    <Resource Include="Resources\PowerShell.ico" />
+    <Resource Include="Resources\powershell_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Commands\UserInterface\ParameterEditorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CredentialUI\SecureStringDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DebugEngine\PromptUI\ReadHostPromptDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DebugEngine\PromptUI\ReadHostPromptForChoicesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Project\Images\Application.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Project\SharedProject\OverwriteFileDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Project\SharedProject\TaskProgressBar.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Project\SharedProject\Wpf\Controls.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Project\SharedProject\Debugger\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PowerShell.HostService.Console\PowerShell.HostService.Console.csproj">
+      <Project>{e84fc12d-897f-4244-b44c-b42839d677a4}</Project>
+      <Name>PowerShell.HostService.Console</Name>
+      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
+    </ProjectReference>
+    <ProjectReference Include="..\PowerShellTools.Common\PowerShellTools.Common.csproj">
+      <Project>{F62AB73F-FD18-4C6D-967C-5DB4CD14B92B}</Project>
+      <Name>PowerShellTools.Common</Name>
+      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
+    </ProjectReference>
+    <ProjectReference Include="..\PowerShellTools.Explorer\PowerShellTools.Explorer.csproj">
+      <Project>{df5ba825-19af-4b98-af3a-d93d8f026f8d}</Project>
+      <Name>PowerShellTools.Explorer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PowerShellTools.HostService.x86\PowerShellTools.HostService.x86.csproj">
+      <Project>{528d75e0-71d8-408c-aeae-485d84e08bd2}</Project>
+      <Name>PowerShellTools.HostService.x86</Name>
+      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
+    </ProjectReference>
+    <ProjectReference Include="..\PowerShellTools.HostService\PowerShellTools.HostService.csproj">
+      <Project>{8b0f3db2-ad3d-4d3a-85c3-4850263054e9}</Project>
+      <Name>PowerShellTools.HostService</Name>
+      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
+    </ProjectReference>
+    <ProjectReference Include="..\PowerShellTools.Contracts\PowerShellTools.Contracts.csproj">
+      <Project>{103c9af2-f8a5-4bf0-a341-a43147c320aa}</Project>
+      <Name>PowerShellTools.Contracts</Name>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </ProjectReference>
+    <ProjectReference Include="..\PowerShellTools.MSBuild\PowerShellTools.MSBuild.csproj">
+      <Project>{201bd87e-3a2a-4e13-b516-dcfae86279ba}</Project>
+      <Name>PowerShellTools.MSBuild</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <InstallRoot>MSBuild</InstallRoot>
+      <VSIXSubPath>PowerShell Tools for Visual Studio</VSIXSubPath>
+    </ProjectReference>
+    <ProjectReference Include="..\PowerShellTools.TestAdapter\PowerShellTools.TestAdapter.csproj">
+      <Project>{df4ab4f5-6b06-4aae-aee7-8cab296db5f9}</Project>
+      <Name>PowerShellTools.TestAdapter</Name>
+      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
+    </ProjectReference>
+    <ProjectReference Include="..\ReplWindow\PowerShellTools.Repl.csproj">
+      <Project>{20bb6fac-44d2-4d76-abfe-0c1e163a1a4f}</Project>
+      <Name>PowerShellTools.Repl</Name>
+      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3bPkgdefProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <PropertyGroup>
+    <UseCodebase>true</UseCodebase>
+  </PropertyGroup>
+  <Import Project="..\Build\ProjectAfter.settings" />
+  <PropertyGroup>
+    <PostBuildEvent>PowerShell -ExecutionPolicy Unrestricted -File "$(ProjectDir)PostBuild.ps1" $(OutDir)PowerShellTools.$(VSTarget).vsix
+</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
+</Project>

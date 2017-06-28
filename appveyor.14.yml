@@ -1,0 +1,35 @@
+version: 3.0.{build}
+# The above also controls the VSIX Version. For any dlls which are intended to be referenced from
+# 3rd parties, eg, any contract DLLs, those have their own AssemblyInfo/AssemblyVersioning.
+
+os:
+#- Windows Server 2012 R2 # This has Dev 12.
+- Visual Studio 2015 # This has Dev 14.
+
+
+configuration: Release
+platform: Any CPU
+
+environment:
+  signing_code:
+    secure: fDI39OFs8s8fqvp08JPiOQ==
+  matrix:
+  - VisualStudioVersion: 14.0
+
+before_build:
+  - nuget restore
+
+build:
+  parallel: true
+  verbosity: minimal
+
+artifacts:
+  - path: bin\VS140\Release\PowerShellTools.14.0.vsix
+    name: PowerShellTools.14.0.vsix
+  - path: bin\VS140\Release\PDB
+assembly_info:
+  patch: true
+  file: Build\AssemblyVersion.cs
+  assembly_version: '{version}'
+  assembly_file_version: '{version}'
+  assembly_informational_version: '{version}'

@@ -1,0 +1,10 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <UsingTask AssemblyFile="PowerShellTools.MsBuild.dll" TaskName="PowerShellTools.MsBuild.RunPowerShellCommand" />
+
+  <Target Name="Build">
+    <RunPowerShellCommand Command="$(PreBuildScript)" Condition="'$(PreBuildScript)' != ''"/>
+    <RunPowerShellCommand Command="$(PostBuildScript)" Condition="'$(PostBuildScript)' != ''"/>
+  </Target>
+
+  <Import Project="$(MSBuildExtensionsPath)\PowerShell Pro Tools\PowerShellProTools.targets" Condition="Exists('$(MSBuildExtensionsPath)\PowerShell Pro Tools\PowerShellProTools.targets')" />
+</Project>

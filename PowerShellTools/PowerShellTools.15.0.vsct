@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <!-- This include contains all common vsct items. -->
+  <Include href="PowerShellTools.vsct"/>
+  
+  <Symbols>
+    <!-- These are the the package guids. These need to be the same as the Guids in Guids.cs/Common.Build.Targets.  This is going to differ for each version of Visual Studio.-->
+    <GuidSymbol name="guidPoshToolsPckg" value="{0429083f-fdbc-47a3-84ff-b3d50343b21e}"/> <!-- Dev 15 -->
+
+  </Symbols>
+</CommandTable>

@@ -1,0 +1,43 @@
+version: 3.0.{build}
+# The above also controls the VSIX Version. For any dlls which are intended to be referenced from
+# 3rd parties, eg, any contract DLLs, those have their own AssemblyInfo/AssemblyVersioning.
+
+image:
+- Visual Studio 2017
+
+configuration: Release
+platform: Any CPU
+
+environment:
+  signing_code:
+    secure: fDI39OFs8s8fqvp08JPiOQ==
+  matrix:
+    - VisualStudioVersion: 15.0
+      inbox: false
+    - VisualStudioVersion: 15.0
+      inbox: true
+
+before_build:
+  - copy packages.15.config packages.config
+  - nuget restore
+  - cmd: "\"C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\Common7\\Tools\\VsDevCmd.bat\""
+
+build:
+  parallel: true
+  verbosity: minimal
+
+artifacts:
+  - path: bin\VS150\Release\PowerShellTools.15.0.vsix
+    name: PowerShellTools.15.0.vsix
+  - path: bin\VS150\Release\PowerShellTools.VS2017.json
+    name: PowerShellTools.VS2017.json
+  - path: bin\VS150\Release\PDB
+assembly_info:
+  patch: true
+  file: Build\AssemblyVersion.cs
+  assembly_version: '{version}'
+  assembly_file_version: '{version}'
+  assembly_informational_version: '{version}'
+
+#BUG: Tests are failing to run at all in new AppVeyor instance. 
+test: off

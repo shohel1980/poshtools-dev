@@ -1,0 +1,58 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Choose>
+    <When Condition="'$(Language)' == 'C#' and !$(SuppressCommonAssemblyMetadata)">
+      <PropertyGroup>
+        <TrackFileAccess>false</TrackFileAccess>
+        <!-- CHECK RELEVANCE -->
+      </PropertyGroup>
+      <ItemGroup>
+        <Compile Include="$(BuildRoot)\Build\AssemblyInfoCommon.cs">
+          <Link>AssemblyInfoCommon.cs</Link>
+        </Compile>
+        <Compile Include="$(BuildRoot)\Build\AssemblyVersion.cs">
+          <Link>AssemblyVersion.cs</Link>
+        </Compile>
+      </ItemGroup>
+      <PropertyGroup>
+        <TrackFileAccess>true</TrackFileAccess>
+        <!-- CHECK RELEVANCE -->
+      </PropertyGroup>
+    </When>
+  </Choose>
+
+  <PropertyGroup>
+    <!-- If we are building on a local dev machine, pretend we're given this other version number. Dev builds will have this number.-->
+    <appveyor_build_version Condition=" '$(appveyor_build_version)' == '' ">99.2.3.4</appveyor_build_version>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Pacakge Guids; These need to be the same as the GUIDs in Guids.cs/PowerShellTools.vsct-->
+    <VsixGuid Condition=" '$(VSTarget)' == '12.0' ">58dce676-42b0-4dd6-9ee4-afbc8e582b8a</VsixGuid>
+    <VsixGuid Condition=" '$(VSTarget)' == '14.0' ">59875F69-67B7-4A5C-B33A-9E2C2B5D266D</VsixGuid>
+    <VsixGuid Condition=" '$(VSTarget)' == '15.0' ">0429083f-fdbc-47a3-84ff-b3d50343b21e</VsixGuid>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <VsixDisplayName Condition=" '$(VSTarget)' == '12.0' ">PowerShell Tools for Visual Studio 2013</VsixDisplayName>
+    <VsixDisplayName Condition=" '$(VSTarget)' == '14.0' ">PowerShell Tools for Visual Studio 2015</VsixDisplayName>
+    <VsixDisplayName Condition=" '$(VSTarget)' == '15.0' ">PowerShell Tools for Visual Studio 2017</VsixDisplayName>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <VsixVsTarget Condition=" '$(VSTarget)' == '12.0' ">[12.0, 14.0)</VsixVsTarget>
+    <VsixVsTarget Condition=" '$(VSTarget)' == '14.0' ">[14.0, 15.0)</VsixVsTarget>
+    <VsixVsTarget Condition=" '$(VSTarget)' == '15.0' ">[15.0.26203.0, 16.0)</VsixVsTarget>
+  </PropertyGroup>
+
+  <!-- Returns the current build version. Used in .vsixmanifests to substitute our build version into them -->
+  <!-- TODO: Bring the below into its own .targets file, possibly Vsix.Targets, and import it. -->
+  <Target Name="GetVsixVersion" Outputs="$(appveyor_build_version)" />
+  <Target Name="GetVsixVSTarget" Outputs="$(VsixVsTarget)" />
+  <Target Name="GetVsixGuid" Outputs="$(VsixGuid)" />
+  <Target Name="GetVsixDisplayName" Outputs="$(VsixDisplayName)" />
+  
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" Condition="'$(Language)' == 'C#'" />
+  <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(Language)' == 'C#' and '$(CreateVsixContainer)' != '' and $(CreateVsixContainer) and '$(VSToolsPath)' != ''" />
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" Condition="'$(Language)' == 'C++'" />
+  <Import Project="$(WixTargetsPath)" Condition="'$(Language)' == 'WiX'" />
+</Project>
